@@ -11,29 +11,28 @@ class MainMiddleware {
 
     async start() {
         try {
-            if (this.msg.body === '!test') {
-                //msg.resp( msg.showMsg() );
-                if(await this.msg.isOwner()) {
-                    this.msg.resp('Sim é dono');
-                } else this.msg.resp('Não é dono');
-            }
+            const command = this.msg.getCommand();
 
-            if (this.msg.body === '!ping') {
-                this.msg.resp('pong');
-            }
-            
-            if (this.msg.body.startsWith('!abrirgp')) {
-                await scheduleGP(this.client, this.msg);
-            }
+            switch(command) {
+                case 'test':
+                    this.msg.resp( this.msg.getCommand() );
+                break;
 
-            if (this.msg.body.startsWith('!fechargp')) {
-                await scheduleGP(this.client, this.msg);
-            }
+                case 'ping':
+                    this.msg.resp('pong');
+                break;
 
-            if (this.msg.body.startsWith('!agendamentos')) {
-                const agendamentos = await getSchedulesGPS(this.client);
-                this.msg.resp(agendamentos);
-            }
+                case 'agendamentos':
+                    const agendamentos = await getSchedulesGPS(this.client);
+                    this.msg.resp(agendamentos);
+                break;
+
+                case 'abrirgp':
+                case 'fechargp':
+                    await scheduleGP(this.client, this.msg);
+                break;
+
+            };
 
         } catch (error) {
             saveError('[Erro na start do MainMiddleware.js]: ', error);

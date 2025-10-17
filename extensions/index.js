@@ -36,9 +36,16 @@ const messageExtras = {
         }
     },
 
+    getCommand() {
+        const match = this.body.trim().match(/^!(\S+)/);
+        return match ? match[1] : null;
+    },
+
     isCommandValid() {
-        return (this.body.startsWith('!') && this.body.length > 3);
-    }
+        const command = this.getCommand();
+        return command !== null && command.length > 3;
+    },
+
 
     
 };
